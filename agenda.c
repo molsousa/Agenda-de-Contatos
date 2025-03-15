@@ -306,8 +306,7 @@ void menu()
 
     FILE *arquivo = fopen("Agenda.bin", "rb+");
     if(!arquivo){
-        printf("Nao foi possivel abrir o arquivo\n");
-        exit(1);
+        arquivo = fopen("Agenda.bin", "wb+");
     }
 
     l = carregar_agenda(arquivo);
