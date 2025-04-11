@@ -1,46 +1,8 @@
 #ifndef AGENDA_H_
 #define AGENDA_H_
-#define MAX 26
 
-// Estrutura para dia de nascimento
-typedef struct aniversario{
-    int dia;
-    int mes;
-    int ano;
-}Aniversario;
-
-// Estrutura para agenda
-typedef struct agenda{
-    char nome[MAX];
-    int telefone;
-    Aniversario a;
-}Agenda;
-
-// Estrutura de lista dinamica
-typedef struct lista{
-    Agenda a;
-    struct lista *prox;
-}Lista;
-
-// Funcao para criacao de lista encadeada
-// Pre-condicao: ponteiro Lista criado
-// Pos-condicao: nenhum
-Lista *criar_lista();
-
-// Funcao para inserir na lista
-// Pre-condicao: lista criada
-// Pos-condicao: retorna um ponteiro do tipo Lista
-Lista *lista_insere(Lista *l, Agenda x);
-
-// Funcao para excluir elemento da lista
-// Pre-condicao: lista criada
-// Pos-condicao: nenhuma
-Lista *excluir_elemento(Lista *l, char *x);
-
-// Funcao para liberar lista encadeada
-// Pre-condicao: lista criada
-// Pos-condicao: nenhuma
-void liberar_lista(Lista* l);
+typedef struct lista Lista;
+typedef struct agenda Agenda;
 
 // Funcao para imprimir todos os elementos da lista
 // Pre-condicao: nenhuma

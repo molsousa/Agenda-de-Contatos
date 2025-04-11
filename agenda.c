@@ -1,86 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "listas.h"
 #include "agenda.h"
-
-// Funcao para criacao de lista encadeada
-// Pre-condicao: ponteiro Lista criado
-// Pos-condicao: nenhum
-Lista *criar_lista()
-{
-    return NULL;
-}
-
-// Funcao para criacao de lista encadeada
-// Pre-condicao: ponteiro Lista criado
-// Pos-condicao: nenhum
-Lista *lista_insere(Lista *l, Agenda x)
-{
-    Lista *aux;
-
-    aux = (Lista*) malloc(sizeof(Lista));
-
-    aux->a = x;
-    aux->prox = l;
-
-    return aux;
-}
-
-// Funcao para excluir elemento da lista
-// Pre-condicao: lista criada
-// Pos-condicao: nenhuma
-Lista *excluir_elemento(Lista *l, char *x)
-{
-    Lista *anterior = NULL;
-    Lista *aux = l;
-
-    // loop ocorre ate que aux seja nulo e encontre um nome igual
-    while(aux != NULL && (strcmp(aux->a.nome, x)) != 0){
-        anterior = aux;
-        aux = aux->prox;
-    }
-
-    // se for nulo, retorna a lista
-    if(aux == NULL){
-        printf("Usuario nao encontrado\n\n");
-        system("pause");
-        system("cls");
-        return l;
-    }
-
-    // caso o nome esteja no inicio da lista
-    if(aux == l){
-        l = aux->prox;
-    }
-
-    // caso o nome esteja no final ou no meio da lista
-    // o valor anterior a aux recebe o valor posterior de aux
-    // 11-> - *13->* - 15-> | 11 -> - 15->
-    else
-        anterior->prox = aux->prox;
-
-    free(aux);
-
-    return l;
-}
-
-// Funcao para liberar lista encadeada
-// Pre-condicao: lista criada
-// Pos-condicao: nenhuma
-void liberar_lista(Lista* l)
-{
-    Lista *aux = l;
-    Lista *t;
-
-    // percorre a lista ate que seja nula (final da lista)
-    while(aux->prox != NULL){
-        t = aux->prox;
-        free(aux);
-        aux = t;
-    }
-
-    free(aux);
-}
 
 // Funcao para imprimir todos os elementos da lista
 // Pre-condicao: nenhuma
@@ -118,7 +40,7 @@ void buscar_contato(Lista *l, char *nome)
     }
 
     for(aux = l; aux != NULL; aux = aux->prox){
-        if( !strcmp(nome, aux->a.nome) ){
+        if( !strcmp(nome, aux->agend.nome) ){
             imprimir_contato(aux);
         }
     }
@@ -139,11 +61,11 @@ void inserir_dados(Agenda *x)
     scanf("%d", &x->telefone);
 
     printf("Insira o dia de nascimento: ");
-    scanf("%d", &x->a.dia);
+    scanf("%d", &x->aniv.dia);
     printf("Insira o mes de nascimento: ");
-    scanf("%d", &x->a.mes);
+    scanf("%d", &x->aniv.mes);
     printf("Insira o ano de nascimento: ");
-    scanf("%d", &x->a.ano);
+    scanf("%d", &x->aniv.ano);
 }
 
 // Imprimir determinado contato
@@ -152,9 +74,9 @@ void inserir_dados(Agenda *x)
 void imprimir_contato(Lista *l)
 {
     printf("-------------------------------------------------\n");
-    printf("\tNome: %s\n", l->a.nome);
-    printf("\tTelefone: %d\n", l->a.telefone);
-    printf("\tData de nascimento: %d/%d/%d\n", l->a.a.dia, l->a.a.mes, l->a.a.ano);
+    printf("\tNome: %s\n", l->agend.nome);
+    printf("\tTelefone: %d\n", l->agend.telefone);
+    printf("\tData de nascimento: %d/%d/%d\n", l->agend.aniv.dia, l->agend.aniv.mes, l->agend.aniv.ano);
     printf("-------------------------------------------------\n");
 }
 
@@ -181,7 +103,7 @@ void usuarios_letra(Lista *l, char c)
     }
 
     for(; aux != NULL; aux = aux->prox){
-        if(aux->a.nome[0] == c){
+        if(aux->agend.nome[0] == c){
             imprimir_contato(aux);
             i = 1;
         }
@@ -207,7 +129,7 @@ void aniversariantes(Lista *l, int x)
     }
 
     for(; aux != NULL; aux = aux->prox){
-        if(aux->a.a.mes == x){
+        if(aux->agend.aniv.mes == x){
             imprimir_contato(aux);
             i = 1;
         }
@@ -231,7 +153,7 @@ Lista *carregar_agenda(FILE *f)
     int aux_telefone = 0;
     int aux_nascimento[3] = {0, 0, 0};
 
-    x.a.dia = 0; x.a.mes = 0; x.a.ano = 0;
+    x.aniv.dia = 0; x.aniv.mes = 0; x.aniv.ano = 0;
     x.telefone = 0;
     strcpy(x.nome, "NULL");
     strcpy(aux, "NULL");
@@ -239,11 +161,11 @@ Lista *carregar_agenda(FILE *f)
     while(fgets(c, 1000, f) != NULL){
         sscanf(c, "Nome: %s", x.nome);
         sscanf(c, "Telefone: %d", &x.telefone);
-        sscanf(c, "Data de nascimento: %d/%d/%d", &x.a.dia, &x.a.mes, &x.a.ano);
+        sscanf(c, "Data de nascimento: %d/%d/%d", &x.aniv.dia, &x.aniv.mes, &x.aniv.ano);
 
         if(strcmp(x.nome, aux) != 0){
             if(x.telefone != aux_telefone){
-                if(x.a.dia != aux_nascimento[0] && x.a.mes != aux_nascimento[1] && x.a.ano != aux_nascimento[2]){
+                if(x.aniv.dia != aux_nascimento[0] && x.aniv.mes != aux_nascimento[1] && x.aniv.ano != aux_nascimento[2]){
                     novo = lista_insere(novo, x);
 
                     sscanf(c, "Nome: %s", aux);
@@ -265,9 +187,9 @@ void armazenar_agenda(Lista *l, FILE *f, Lista *p)
 
     for(; aux != NULL && aux != p; aux = aux->prox){
         fprintf(f, "---------------------------------------------\n");
-        fprintf(f, "Nome: %s\n", aux->a.nome);
-        fprintf(f, "Telefone: %d\n", aux->a.telefone);
-        fprintf(f, "Data de nascimento: %d/%d/%d\n", aux->a.a.dia, aux->a.a.mes, aux->a.a.ano);
+        fprintf(f, "Nome: %s\n", aux->agend.nome);
+        fprintf(f, "Telefone: %d\n", aux->agend.telefone);
+        fprintf(f, "Data de nascimento: %d/%d/%d\n", aux->agend.aniv.dia, aux->agend.aniv.mes, aux->agend.aniv.ano);
         fprintf(f, "---------------------------------------------\n");
     }
 
@@ -284,9 +206,9 @@ Lista *reescrever_agenda(Lista *l, FILE *f)
 
     for(; aux != NULL; aux = aux->prox){
         fprintf(f, "---------------------------------------------\n");
-        fprintf(f, "Nome: %s\n", aux->a.nome);
-        fprintf(f, "Telefone: %d\n", aux->a.telefone);
-        fprintf(f, "Data de nascimento: %d/%d/%d\n", aux->a.a.dia, aux->a.a.mes, aux->a.a.ano);
+        fprintf(f, "Nome: %s\n", aux->agend.nome);
+        fprintf(f, "Telefone: %d\n", aux->agend.telefone);
+        fprintf(f, "Data de nascimento: %d/%d/%d\n", aux->agend.aniv.dia, aux->agend.aniv.mes, aux->agend.aniv.ano);
         fprintf(f, "---------------------------------------------\n");
     }
 
