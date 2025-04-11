@@ -178,7 +178,7 @@ Lista *carregar_agenda(FILE *f)
     return novo;
 }
 
-// Funcao para armazenar lista num arquivo binario
+// Funcao para armazenar lista num arquivo
 // Pre-condicao: nenhuma
 // Pos-condicao: nenhuma
 void armazenar_agenda(Lista *l, FILE *f, Lista *p)
@@ -202,7 +202,7 @@ void armazenar_agenda(Lista *l, FILE *f, Lista *p)
 Lista *reescrever_agenda(Lista *l, FILE *f)
 {
     Lista *aux = l;
-    f = fopen("Agenda.bin", "wb+");
+    f = fopen("Agenda.txt", "w+");
 
     for(; aux != NULL; aux = aux->prox){
         fprintf(f, "---------------------------------------------\n");
@@ -226,9 +226,9 @@ void menu()
     char *nome = (char*) malloc(MAX * sizeof(char));
     int n;
 
-    FILE *arquivo = fopen("Agenda.bin", "rb+");
+    FILE *arquivo = fopen("Agenda.txt", "r+");
     if(!arquivo){
-        arquivo = fopen("Agenda.bin", "wb+");
+        arquivo = fopen("Agenda.txt", "w+");
     }
 
     l = carregar_agenda(arquivo);

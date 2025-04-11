@@ -44,7 +44,7 @@ void aniversariantes(Lista *l, int x);
 // Pos-condicao: nenhuma
 Lista *carregar_agenda(FILE *f);
 
-// Funcao para armazenar lista num arquivo binario
+// Funcao para armazenar lista num arquivo
 // Pre-condicao: nenhuma
 // Pos-condicao: nenhuma
 void armazenar_agenda(Lista *l, FILE *f, Lista *p);
