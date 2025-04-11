@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "agenda.h"
+#include "src/Agenda/agenda.h"
 
 int main()
 {

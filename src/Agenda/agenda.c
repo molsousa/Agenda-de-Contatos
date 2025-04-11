@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "listas.h"
+#include "../listas.h"
 #include "agenda.h"
 
 // Funcao para imprimir todos os elementos da lista
